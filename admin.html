@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="Syaj_files/fAvcon image.png" rel="icon">
+<title>Admin | Coastal Retreat Realty</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+<style>
+  :root { --gold: #d5c9af; --gold-dark: #b8a97e; --ink: #1c1c1c; --muted: #737373; --line: #e5e2da; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; background: #f6f4f0; color: var(--ink); }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+  .login-card { max-width: 380px; margin: 100px auto; background: white; border-radius: 12px; padding: 32px; box-shadow: 0 12px 34px rgba(0,0,0,0.10); }
+  .login-card h2 { margin: 0 0 6px; text-transform: uppercase; font-size: 20px; }
+  .login-card p { color: var(--muted); margin: 0 0 22px; font-size: 14px; }
+
+  .admin-topbar { background: #17181a; padding: 16px 0; }
+  .admin-topbar .wrap { display: flex; align-items: center; justify-content: space-between; }
+  .admin-topbar img { height: 40px; display: block; }
+  .topbar-actions a, .topbar-actions button {
+    display: inline-block; margin-left: 10px; padding: 9px 18px; border-radius: 999px;
+    border: 1.5px solid var(--gold); background: transparent; color: var(--gold);
+    font-size: 13px; font-weight: 700; text-decoration: none; cursor: pointer;
+  }
+  .topbar-actions a:hover, .topbar-actions button:hover { background: var(--gold); color: #17181a; }
+
+  .tabs { display: flex; gap: 8px; margin: 24px 0 0; }
+  .tab-btn {
+    padding: 10px 20px; border-radius: 8px 8px 0 0; border: none; background: #e9e6df;
+    font-weight: 700; font-size: 13.5px; cursor: pointer; color: #555;
+  }
+  .tab-btn.active { background: white; color: var(--ink); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .admin-body { padding: 0 0 70px; }
+  .admin-grid { display: grid; grid-template-columns: 380px 1fr; gap: 26px; align-items: start; background: white; padding: 24px; border-radius: 0 12px 12px 12px; box-shadow: 0 4px 18px rgba(0,0,0,0.06); }
+  @media (max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } }
+
+  .card { background: white; }
+  .card h3 { margin: 0 0 18px; text-transform: uppercase; font-size: 16px; }
+  .card-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+  .card-header-row h3 { margin: 0; }
+
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: #444; }
+  .field small { color: #999; font-weight: 400; }
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px;
+    font-size: 14px; font-family: inherit; background: #fff;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--gold-dark); }
+
+  .btn { display: block; width: 100%; text-align: center; padding: 12px; border-radius: 8px; border: none;
+    background: var(--gold-dark); color: white; font-weight: 700; font-size: 14px; cursor: pointer; margin-top: 4px; }
+  .btn:hover { background: #a08e5f; }
+  .btn-outline { background: white; color: var(--ink); border: 1.5px solid var(--line); }
+  .btn-outline:hover { background: #f2f0eb; }
+  .btn-small { display: inline-block; width: auto; padding: 8px 16px; font-size: 13px; margin-top: 0; }
+  .error-text { color: #c0392b; font-size: 13px; margin-top: 8px; }
+
+  .admin-row { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .admin-row:last-child { border-bottom: none; }
+  .admin-row img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; background: #eee; flex-shrink: 0; }
+  .admin-row-info { flex: 1; min-width: 0; }
+  .admin-row-info .t { font-weight: 700; font-size: 15px; }
+  .admin-row-info .s { font-size: 13px; color: var(--muted); }
+  .admin-row-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .admin-row-actions button { border: 1px solid var(--line); background: white; border-radius: 6px; padding: 7px 12px; font-size: 12.5px; cursor: pointer; }
+  .admin-row-actions button:hover { background: #f2f0eb; }
+  .empty-msg { color: var(--muted); font-size: 14px; }
+
+  .lead-row { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .lead-row:last-child { border-bottom: none; }
+  .lead-row .t { font-weight: 700; font-size: 14.5px; }
+  .lead-row .s { font-size: 13px; color: var(--muted); margin: 2px 0; }
+  .lead-row .m { font-size: 13.5px; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-card">
+    <h2>Admin Login</h2>
+    <p>Sign in to manage property listings.</p>
+    <div class="field"><label>Email</label><input type="email" id="login-email"></div>
+    <div class="field"><label>Password</label><input type="password" id="login-password"></div>
+    <button class="btn" id="login-btn">Sign in</button>
+    <p class="error-text" id="login-error"></p>
+  </div>
+</div>
+
+<div id="dashboard" style="display:none;">
+  <div class="admin-topbar">
+    <div class="wrap">
+      <img src="./Syaj_files/logo-syaj.png" alt="Coastal Retreat Realty">
+      <div class="topbar-actions">
+        <a href="properties.html">View site</a>
+        <button id="logout-btn">Log out</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap admin-body">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="listings">Listings</button>
+      <button class="tab-btn" data-tab="leads">Leads <span id="lead-count-badge"></span></button>
+    </div>
+
+    <!-- ===================== LISTINGS TAB ===================== -->
+    <div class="tab-panel active" id="tab-listings">
+      <div class="admin-grid">
+
+        <div class="card">
+          <h3 id="form-title">Add new listing</h3>
+
+          <div class="field"><label>Type</label>
+            <select id="f-type">
+              <option value="rent">Airbnb / Rental</option>
+              <option value="sale">For Sale</option>
+            </select>
+          </div>
+          <div class="field"><label>Title</label><input type="text" id="f-title" placeholder="e.g. Watamu"></div>
+
+          <div class="field">
+            <label>Image URLs <small>(one per line, first = cover photo)</small></label>
+            <textarea id="f-images" rows="3" placeholder="./Syaj_files/watamu.png&#10;https://example.com/photo2.jpg"></textarea>
+          </div>
+
+          <div class="field"><label>Price (Ksh)</label><input type="number" id="f-price" placeholder="62000"></div>
+          <div class="field"><label>Price type</label>
+            <select id="f-price-type">
+              <option value="per_night">Per night (Airbnb)</option>
+              <option value="total">Total price (Sale)</option>
+            </select>
+          </div>
+
+          <div class="field"><label>Bedrooms</label><input type="number" id="f-bedrooms"></div>
+          <div class="field"><label>Bathrooms</label><input type="number" id="f-bathrooms"></div>
+          <div class="field"><label>Location</label><input type="text" id="f-location" placeholder="e.g. Watamu, near Turtle Bay"></div>
+          <div class="field"><label>Google Maps link <small>(optional)</small></label><input type="text" id="f-maplink" placeholder="https://maps.google.com/..."></div>
+
+          <div class="field" id="field-availability">
+            <label>Availability (Airbnb only)</label>
+            <select id="f-availability">
+              <option value="available">Available</option>
+              <option value="booked">Booked</option>
+            </select>
+          </div>
+
+          <div class="field" id="field-deposit">
+            <label>Deposit % (Sale only)</label>
+            <input type="number" id="f-deposit" placeholder="20">
+          </div>
+
+          <div class="field" id="field-testimonials">
+            <label>Testimonials (Airbnb only) <small>one per line: Name: review</small></label>
+            <textarea id="f-testimonials" rows="3" placeholder="Jane: Amazing stay, walked to the beach in 5 minutes!"></textarea>
+          </div>
+
+          <div class="field"><label>Description</label><textarea id="f-description" rows="4"></textarea></div>
+
+          <p class="error-text" id="form-error"></p>
+          <button class="btn" id="save-btn">Save listing</button>
+          <button class="btn btn-outline" id="cancel-edit-btn" style="display:none;">Cancel edit</button>
+        </div>
+
+        <div class="card">
+          <div class="card-header-row">
+            <h3>Your listings</h3>
+            <button class="btn btn-outline btn-small" id="seed-btn">Load starter listings</button>
+          </div>
+          <div id="admin-list"><p class="empty-msg">Loading...</p></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ===================== LEADS TAB ===================== -->
+    <div class="tab-panel" id="tab-leads">
+      <div class="card" style="background:white; padding:24px; border-radius:0 12px 12px 12px; box-shadow:0 4px 18px rgba(0,0,0,0.06);">
+        <h3>Enquiries from your site</h3>
+        <div id="leads-list"><p class="empty-msg">Loading...</p></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/admin-dynamic.js"></script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="Syaj_files/fAvcon image.png" rel="icon">
+    <title>Our Properties | Coastal Retreat Realty</title>
+
+    <link href="./Syaj_files/all.min.css" rel="stylesheet">
+    <link href="./Syaj_files/bootstrap-icons.css" rel="stylesheet">
+    <link href="./Syaj_files/animate.css" rel="stylesheet">
+    <link href="./Syaj_files/owl.carousel.min.css" rel="stylesheet">
+    <link href="./Syaj_files/bootstrap.min.css" rel="stylesheet">
+    <link href="./Syaj_files/style.css" rel="stylesheet">
+
+    <style>
+        .filter-pills { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 40px; }
+        .filter-pill.active { background: var(--bs-primary); color: #fff; border-color: var(--bs-primary); }
+        .pd-empty { text-align: center; padding: 60px 0; color: #777; }
+
+        .pd-card { position: relative; }
+        .pd-heart {
+            position: absolute; top: 10px; right: 10px; z-index: 5;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(0,0,0,0.55); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 16px;
+        }
+        .pd-heart.saved { color: #ff4d6d; }
+        .pd-avail-badge {
+            position: absolute; top: 10px; left: 10px; z-index: 5;
+            padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;
+            text-transform: uppercase; color: #fff;
+        }
+        .pd-avail-badge.available { background: #1c8f5e; }
+        .pd-avail-badge.booked { background: #b23b3b; }
+        .pd-price-line { font-weight: 700; margin: 10px 0 2px; }
+        .pd-price-line small { font-weight: 400; color: #888; font-size: 12px; }
+
+        /* Modal */
+        .pd-modal-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(10,10,10,0.75);
+            align-items: center; justify-content: center; z-index: 500; padding: 16px;
+        }
+        .pd-modal-overlay.open { display: flex; }
+        .pd-modal {
+            background: #fff; border-radius: 14px; max-width: 720px; width: 100%;
+            max-height: 92vh; overflow-y: auto; position: relative;
+        }
+        .pd-modal-close {
+            position: absolute; top: 14px; right: 14px; z-index: 10;
+            background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%;
+            width: 34px; height: 34px; font-size: 18px; cursor: pointer;
+        }
+        .pd-gallery-main { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 14px 14px 0 0; }
+        .pd-gallery-thumbs { display: flex; gap: 8px; padding: 10px 20px; overflow-x: auto; }
+        .pd-gallery-thumbs img {
+            width: 64px; height: 48px; object-fit: cover; border-radius: 6px; cursor: pointer;
+            opacity: 0.6; flex-shrink: 0;
+        }
+        .pd-gallery-thumbs img.active { opacity: 1; outline: 2px solid var(--bs-primary); }
+        .pd-modal-body { padding: 6px 24px 26px; }
+        .pd-row { display: flex; gap: 18px; flex-wrap: wrap; margin: 10px 0 16px; font-size: 14px; color: #555; }
+        .pd-section-title { font-weight: 700; text-transform: uppercase; font-size: 13px; letter-spacing: .03em; margin: 20px 0 8px; color: #333; }
+        .pd-whatsapp-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #25D366; color: #fff; padding: 12px 22px; border-radius: 8px;
+            font-weight: 700; text-decoration: none; border: none; cursor: pointer;
+        }
+        .pd-whatsapp-btn:hover { background: #1ebe57; color: #fff; }
+        .pd-map-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            border: 1.5px solid var(--bs-primary); color: var(--bs-primary);
+            padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 13px;
+        }
+
+        .pd-calc { background: #f7f5f1; border-radius: 10px; padding: 16px; margin-top: 10px; }
+        .pd-calc label { font-size: 12.5px; font-weight: 600; display: block; margin-bottom: 4px; }
+        .pd-calc input { width: 100%; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; margin-bottom: 10px; }
+        .pd-calc-result { font-weight: 700; font-size: 15px; margin-top: 6px; }
+
+        .pd-testimonial { background: #f7f5f1; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; font-size: 13.5px; }
+        .pd-testimonial b { display: block; font-size: 12.5px; color: var(--bs-primary); margin-bottom: 2px; }
+
+        .pd-similar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        @media (max-width: 600px) { .pd-similar-grid { grid-template-columns: 1fr; } }
+        .pd-similar-card { cursor: pointer; }
+        .pd-similar-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 8px; }
+        .pd-similar-card .n { font-size: 12.5px; font-weight: 700; margin-top: 4px; }
+
+        /* Lead form */
+        .pd-lead-form { background: #f7f5f1; border-radius: 10px; padding: 16px; margin-top: 18px; }
+        .pd-lead-form input, .pd-lead-form textarea {
+            width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px;
+            font-size: 13.5px; margin-bottom: 10px; font-family: inherit;
+        }
+        .pd-lead-success { color: #1c8f5e; font-weight: 600; font-size: 13.5px; display: none; }
+    </style>
+</head>
+<body class="sidebar-mini">
+    <div class="wrapper">
+        <div class="container-fluid p-0">
+            <nav class="navbar navbar-expand-lg navbar-dark px-lg-5 position-fixed bg-dark shadow-sm">
+                <a href="Syaj.html" class="navbar-brand ms-4 ms-lg-0 mw-100">
+                    <h2 class="mb-0 text-primary text-uppercase mw-100">
+                        <img class="w-120px" src="./Syaj_files/logo-syaj.png">
+                    </h2>
+                </a>
+                <button type="button" class="navbar-toggler me-4" aria-expanded="false">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav mx-auto p-4 p-lg-0">
+                        <a href="Syaj.html" class="nav-item nav-link">Home</a>
+                        <a href="properties.html" class="nav-item nav-link active">Projects</a>
+                        <a href="Syaj.html#AboutUs" class="nav-item nav-link">About Us</a>
+                        <a href="Syaj.html#OurServices" class="nav-item nav-link">Services</a>
+                        <a href="Syaj.html#OurClients" class="nav-item nav-link">Clients</a>
+                        <a href="Syaj.html#AirbnbServices" class="nav-item nav-link fw-bold text-primary airbnb-glow">AIRBNBs</a>
+                        <a href="Syaj.html#ContactUs" class="nav-item nav-link">Contact Us</a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid py-5" style="margin-top: 100px;">
+                <div class="container py-5">
+                    <div class="text-center">
+                        <div class="title wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="title-center">
+                                <h5>Our Projects</h5>
+                                <h1>All Properties</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-pills">
+                        <button class="btn btn-outline-primary border-2 filter-pill active" data-filter="all">All</button>
+                        <button class="btn btn-outline-primary border-2 filter-pill" data-filter="rent">Airbnbs</button>
+                        <button class="btn btn-outline-primary border-2 filter-pill" data-filter="sale">For Sale</button>
+                        <button class="btn btn-outline-primary border-2 filter-pill" data-filter="saved"><i class="fa-solid fa-heart"></i> Saved</button>
+                    </div>
+
+                    <div class="row g-4" id="listing-grid"></div>
+                    <div class="pd-empty" id="pd-empty" style="display:none;"><p>No properties in this category yet.</p></div>
+                </div>
+            </div>
+
+            <div class="container-fluid bg-dark text-light footer py-5 wow fadeIn" data-wow-delay="0.1s">
+                <div class="container text-center py-5">
+                    <a href="Syaj.html"><h1 class="display-4 mb-3 text-white text-uppercase"><img class="w-120px" src="/Syaj_files/logo-syaj.png"></h1></a>
+                    <div class="d-flex justify-content-center mb-4">
+                        <a class="btn btn-lg-square btn-outline-primary border-2 m-1" href="https://www.facebook.com/share/1DEoYphjwX/?mibextid=wwXIfr" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-lg-square btn-outline-primary border-2 m-1" href="https://www.tiktok.com/@ilabonga_alvin" target="_blank" rel="noopener"><i class="fab fa-tiktok"></i></a>
+                        <a class="btn btn-lg-square btn-outline-primary border-2 m-1" href="https://wa.me/254799640567" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                    <p class="mb-0">© Coastal Retreat Realty</p>
+                </div>
+            </div>
+            <a href="#" class="btn btn-outline-primary border-2 btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="pd-modal-overlay" id="pd-modal-overlay">
+        <div class="pd-modal" id="pd-modal"></div>
+    </div>
+
+    <script src="./Syaj_files/jquery-3.4.1.min.js.download"></script>
+    <script src="./Syaj_files/bootstrap.bundle.min.js.download"></script>
+    <script src="./Syaj_files/wow.min.js.download"></script>
+    <script src="./Syaj_files/easing.min.js.download"></script>
+    <script src="./Syaj_files/waypoints.min.js.download"></script>
+    <script src="./Syaj_files/owl.carousel.min.js.download"></script>
+    <script src="./Syaj_files/main.js.download"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const button = document.querySelector(".navbar-toggler");
+            const menu = document.querySelector("#navbarCollapse");
+            button.addEventListener("click", function() {
+                menu.classList.toggle("show");
+                const expanded = this.getAttribute("aria-expanded") === "true";
+                this.setAttribute("aria-expanded", !expanded);
+            });
+        });
+    </script>
+
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/properties-dynamic.js"></script>
+</body>
+</html>

@@ -1,0 +1,691 @@
+(function(abp){
+
+    abp.multiTenancy = abp.multiTenancy || {};
+    abp.multiTenancy.isEnabled = true;
+
+})(abp);
+
+(function(){
+
+    abp.session = abp.session || {};
+    abp.session.userId = null;
+    abp.session.tenantId = null;
+    abp.session.impersonatorUserId = null;
+    abp.session.impersonatorTenantId = null;
+    abp.session.multiTenancySide = 2;
+
+})();
+
+(function(){
+
+    abp.localization = abp.localization || {};
+
+    abp.localization.currentCulture = {
+        name: 'en',
+        displayName: 'English'
+    };
+
+    abp.localization.languages = [{
+        name: 'en',
+        displayName: 'English',
+        icon: 'famfamfam-flags us',
+        isDisabled: false,
+        isDefault: true
+    } , {
+        name: 'es-MX',
+        displayName: 'Español México',
+        icon: 'famfamfam-flags mx',
+        isDisabled: false,
+        isDefault: false
+    } , {
+        name: 'fr',
+        displayName: 'Français',
+        icon: 'famfamfam-flags fr',
+        isDisabled: false,
+        isDefault: false
+    } , {
+        name: 'de',
+        displayName: 'German',
+        icon: 'famfamfam-flags de',
+        isDisabled: false,
+        isDefault: false
+    } , {
+        name: 'it',
+        displayName: 'Italiano',
+        icon: 'famfamfam-flags it',
+        isDisabled: false,
+        isDefault: false
+    } , {
+        name: 'nl',
+        displayName: 'Nederlands',
+        icon: 'famfamfam-flags nl',
+        isDisabled: false,
+        isDefault: false
+    } , {
+        name: 'pt-BR',
+        displayName: 'Português',
+        icon: 'famfamfam-flags br',
+        isDisabled: false,
+        isDefault: false
+    } , {
+        name: 'tr',
+        displayName: 'Türkçe',
+        icon: 'famfamfam-flags tr',
+        isDisabled: false,
+        isDefault: false
+    } , {
+        name: 'ru',
+        displayName: 'Русский',
+        icon: 'famfamfam-flags ru',
+        isDisabled: false,
+        isDefault: false
+    } , {
+        name: 'ar',
+        displayName: 'العربية',
+        icon: 'famfamfam-flags sa',
+        isDisabled: false,
+        isDefault: false
+    } , {
+        name: 'fa',
+        displayName: 'فارسی',
+        icon: 'famfamfam-flags ir',
+        isDisabled: false,
+        isDefault: false
+    } , {
+        name: 'ja',
+        displayName: '日本語',
+        icon: 'famfamfam-flags jp',
+        isDisabled: false,
+        isDefault: false
+    } , {
+        name: 'zh-Hans',
+        displayName: '简体中文',
+        icon: 'famfamfam-flags cn',
+        isDisabled: false,
+        isDefault: false
+    }];
+
+    abp.localization.currentLanguage = {
+        name: 'en',
+        displayName: 'English',
+        icon: 'famfamfam-flags us',
+        isDisabled: false,
+        isDefault: true
+    };
+
+    abp.localization.sources = [
+        {
+            name: 'Abp',
+            type: 'MultiTenantLocalizationSource'
+        },
+        {
+            name: 'AbpWeb',
+            type: 'MultiTenantLocalizationSource'
+        },
+        {
+            name: 'AbpZero',
+            type: 'MultiTenantLocalizationSource'
+        },
+        {
+            name: 'Hexa_Aqari',
+            type: 'MultiTenantLocalizationSource'
+        }
+    ];
+
+    abp.localization.values = abp.localization.values || {};
+
+    abp.localization.values['Abp'] = {
+  "AllOfTheseFeaturesMustBeEnabled": "Required features are not enabled. All of these features must be enabled: {0}",
+  "AllOfThesePermissionsMustBeGranted": "Required permissions are not granted. All of these permissions must be granted: {0}",
+  "AtLeastOneOfTheseFeaturesMustBeEnabled": "Required features are not enabled. At least one of these features must be enabled: {0}",
+  "AtLeastOneOfThesePermissionsMustBeGranted": "Required permissions are not granted. At least one of these permissions must be granted: {0}",
+  "CurrentUserDidNotLoginToTheApplication": "Current user did not login to the application!",
+  "DefaultFromSenderDisplayName": "Default from (sender) display name",
+  "DefaultFromSenderEmailAddress": "Default from (sender) email address",
+  "DefaultLanguage": "Default language",
+  "DomainName": "Domain name",
+  "FeatureIsNotEnabled": "Feature is not enabled: {0}",
+  "MainMenu": "Main menu",
+  "Password": "Password",
+  "ReceiveNotifications": "Receive notifications",
+  "SmtpHost": "SMTP host",
+  "SmtpPort": "SMTP port",
+  "TimeZone": "Timezone",
+  "UseDefaultCredentials": "Use default credentials",
+  "Username": "User name",
+  "UseSSL": "Use SSL"
+};
+
+    abp.localization.values['AbpWeb'] = {
+  "AreYouSure": "Are you sure?",
+  "Cancel": "Cancel",
+  "DefaultError": "An error has occurred!",
+  "DefaultError401": "You are not authenticated!",
+  "DefaultError403": "You are not authorized!",
+  "DefaultError404": "Resource not found!",
+  "DefaultErrorDetail": "Error detail not sent by server.",
+  "DefaultErrorDetail401": "You should be authenticated (sign in) in order to perform this operation.",
+  "DefaultErrorDetail403": "You are not allowed to perform this operation.",
+  "DefaultErrorDetail404": "The resource requested could not found on the server.",
+  "EntityNotFound": "There is no entity {0} with id = {1}!",
+  "InternalServerError": "An internal error occurred during your request!",
+  "ValidationError": "Your request is not valid!",
+  "ValidationNarrativeTitle": "The following errors were detected during validation.",
+  "Yes": "Yes"
+};
+
+    abp.localization.values['AbpZero'] = {
+  "CanNotDeleteAdminUser": "Can not delete user {0} since this is the default admin user!",
+  "CanNotDeleteStaticRole": "Can not delete a static role: {0}",
+  "CanNotRenameAdminUser": "Can not rename user name of the {0} since this is the default admin user!",
+  "Email": "Email",
+  "EmailSecurityCodeBody": "Your security code is: {0}",
+  "EmailSecurityCodeSubject": "Security Code",
+  "Identity.ConcurrencyFailure": "Optimistic concurrency failure, object has been modified.",
+  "Identity.DefaultError": "An unknown failure has occurred.",
+  "Identity.DuplicateEmail": "Email '{0}' is already taken.",
+  "Identity.DuplicateRoleName": "Role name '{0}' is already taken.",
+  "Identity.DuplicateUserName": "Username '{0}' is already taken.",
+  "Identity.InvalidEmail": "Email '{0}' is invalid.",
+  "Identity.InvalidPasswordHasherCompatibilityMode": "The provided PasswordHasherCompatibilityMode is invalid.",
+  "Identity.InvalidPasswordHasherIterationCount": "The iteration count must be a positive integer.",
+  "Identity.InvalidRoleName": "Role name '{0}' is invalid.",
+  "Identity.InvalidToken": "Invalid token.",
+  "Identity.InvalidUserName": "Username '{0}' is invalid, can only contain letters or digits.",
+  "Identity.LoginAlreadyAssociated": "A user with this login already exists.",
+  "Identity.PasswordMismatch": "Incorrect password.",
+  "Identity.PasswordRequireDigit": "Passwords must have at least one digit ('0'-'9').",
+  "Identity.PasswordRequireLower": "Passwords must have at least one lowercase ('a'-'z').",
+  "Identity.PasswordRequireNonAlphanumeric": "Passwords must have at least one non alphanumeric character.",
+  "Identity.PasswordRequireUpper": "Passwords must have at least one uppercase ('A'-'Z').",
+  "Identity.PasswordTooShort": "Passwords must be at least {0} characters.",
+  "Identity.RoleNotFound": "Role {0} does not exist.",
+  "Identity.UserAlreadyHasPassword": "User already has a password set.",
+  "Identity.UserAlreadyInRole": "User already in role '{0}'.",
+  "Identity.UserLockedOut": "User is locked out.",
+  "Identity.UserLockoutNotEnabled": "Lockout is not enabled for this user.",
+  "Identity.UserNameNotFound": "User {0} does not exist.",
+  "Identity.UserNotInRole": "User is not in role '{0}'.",
+  "InvalidFeatureValue": "{0} feature value is not valid!",
+  "InvalidTenancyName": "Tenancy name is not valid!",
+  "OrganizationUnitDuplicateDisplayNameWarning": "There is already an organization unit with name {0}. Two units with same name can not be created in same level.",
+  "RoleDisplayNameIsAlreadyTaken": "Role display name {0} is already taken.",
+  "RoleNameIsAlreadyTaken": "Role name {0} is already taken.",
+  "Sms": "Sms",
+  "SmsSecurityCodeMessage": "Your security code is: {0}",
+  "TenancyNameIsAlreadyTaken": "Tenancy name {0} is already taken."
+};
+
+    abp.localization.values['Hexa_Aqari'] = {
+  "403PageButton": "Go back to Dashboard",
+  "403PageDescription": "You don't have permission to access this resource. Please contact your administrator.",
+  "403PageHeader": "Forbidden",
+  "About": "About",
+  "AboutSYAJ": "About SYAJ",
+  "AboutSYAJRealEstateRiyadh": "\r\n\t\t\tSYAJ Real Estate is a leading real estate company based in Riyadh, Saudi Arabia, dedicated to providing\r\n\t\t\tcomprehensive real estate solutions that meet the evolving needs of individuals, investors, and businesses.\r\n\t\t\tWith a commitment to professionalism, transparency, and market expertise, we specialize in property sales, leasing, management, and real estate marketing.\r\n\t\t",
+  "AboutUs": "About Us",
+  "Accounting": "Accounting",
+  "Actions": "Actions",
+  "AddImages": "Add Images",
+  "Addingfeatures": "Adding Features",
+  "AddingGuarantees": "Adding Guarantees",
+  "AddNearbyLandmarks": "Add Nearby Landmarks",
+  "AdminEmailAddress": "Admin email address",
+  "Administration": "Administration",
+  "AdminPassword": "Admin password",
+  "AdvertisingLicense": "Advertising License",
+  "AlFloor": "Floor",
+  "All": "All",
+  "ALL": "ALL",
+  "ALProject": "Project",
+  "ALUnit": "Unit",
+  "Apartments": "Apartments",
+  "ApplicationDeadlinDate": "Application Deadlin Date",
+  "Applyjob": "Apply job",
+  "AreYouSureWantToDelete": "Are you sure want to delete {0}?",
+  "Article": "Article",
+  "AtSYAJRealEstateweprovideinnovativerealestatesolutionsthathelp": "At SYAJ Real Estate, we provide innovative real estate solutions that help",
+  "Available": "Available",
+  "Back": "Back",
+  "Beginnerlevel": "Beginner level (1-2)",
+  "BrokersPortal": "Brokers Portal",
+  "Budget": "Budget",
+  "BusinessDevelopment": "Business Development",
+  "Call": "Call",
+  "CanBeEmptyToLoginAsHost": "Can be empty to login as host.",
+  "Cancel": "Cancel",
+  "Change": "Change",
+  "ChangeTenant": "Change tenant",
+  "CityofWork": "City of Work",
+  "Clear": "Clear",
+  "ClearAll": "Clear all",
+  "ClearOthers": "Clear others",
+  "Client": "Client",
+  "Clients": "Clients",
+  "Closed": "Closed",
+  "CompanyProfile": "Company Profile",
+  "Comprehensivepropertymanagementservicesincluding": "Comprehensive property management services, including tenant relations, maintenance coordination, and operational oversight",
+  "ComprehensiveRealEstateSolutionsmollis": "Comprehensive Real Estate Solutions mollis justo",
+  "ConfirmNewPassword": "Confirm New Password",
+  "ConfirmPassword": "Confirm password",
+  "ContactUs": "Contact Us",
+  "CouldNotCompleteLoginOperation": "Could not complete login operation. Please try again later.",
+  "CouldNotValidateExternalUser": "Could not validate external user",
+  "Create": "Create",
+  "CreateNewRole": "Create new role",
+  "CreateNewTenant": "Create new tenant",
+  "CreateNewUser": "Create new user",
+  "CurrentPassword": "Current Password",
+  "CurrentTenant": "Current tenant",
+  "DatabaseConnectionString": "Database connection string",
+  "DeepMarketExpertise": "Deep Market Expertise",
+  "DefaultPasswordIs": "Default password is {0}",
+  "Delete": "Delete",
+  "Department": "Department",
+  "DescriptionAr": "Description Ar",
+  "DescriptionEn": "Description En",
+  "DetailsAr": "Details Ar",
+  "DetailsEn": "Details En",
+  "DisplayName": "Display Name",
+  "Distance": "Distance",
+  "East": "East",
+  "Edit": "Edit",
+  "EditRole": "Edit role",
+  "EditTenant": "Edit tenant",
+  "EditUser": "Edit user",
+  "EmailAddress": "Email address",
+  "Events": "Events",
+  "Experience": "Experience",
+  "features": "Features",
+  "FileProject": "File Project",
+  "Filter": "Filter",
+  "Floors": "Floors",
+  "FormIsNotValidMessage": "Form is not valid. Please check and fix errors.",
+  "FullName": "Full name",
+  "Fulltime": "Full-time",
+  "GeographicalTrend": "Trend",
+  "guarantees": "Guarantees",
+  "Helpingclientsbuyandsellresidentialcommercial": "Helping clients buy and sell residential, commercial, and investment properties with confidence and ease",
+  "History": "History",
+  "Home": "Home",
+  "HomePage": "Home page",
+  "HowWeHelpYou": "How We Help You",
+  "HumanResourcesManagement": "Human Resources Management",
+  "Icon": "Icon",
+  "Image": "Image",
+  "individualsandbusinessesachievetheirpropertygoalswithconfidence": "individuals and businesses achieve their property goals with confidence",
+  "Intermediatelevel": "Intermediate level (3-5)",
+  "InvalidEmailAddress": "Invalid email address",
+  "InvalidPattern": "Invalid",
+  "InvalidUserNameOrPassword": "Invalid user name or password",
+  "IsActive": "Is active",
+  "Job": "Job",
+  "JobDescription": "Job Description",
+  "Jobs": "Jobs",
+  "JobSummary": "Job Summary",
+  "JobTitleAr": "Job Title Ar",
+  "JobTitleEn": "Job Title En",
+  "JoinSYAJFutureRealEstateExcellence": "Join SYAJ Real Estate and Be Part of the Future of Real Estate Excellence",
+  "LabelOptions": "Label options",
+  "Landmark": "Landmark",
+  "Latitude": "Latitude",
+  "LeaveEmptyToSwitchToHost": "Leave empty to switch to the host",
+  "LinkImage": "Link Image",
+  "LinkMap": "Link Map",
+  "LocationJob": "Location Job",
+  "LogIn": "Log in",
+  "LoginFailed": "Login failed!",
+  "Logout": "Logout",
+  "longitude": "longitude",
+  "Marketing": "Marketing",
+  "MeetOurProjects": "Meet Our Projects",
+  "Middle": "Middle",
+  "MultiLevelMenu": "Multi Level Menu",
+  "Name": "Name",
+  "NameAr": "Name Ar",
+  "NameEn": "Name En",
+  "NameSurname": "Name surname",
+  "Neighborhood": "Neighborhood",
+  "NewPassword": "New Password",
+  "News": "News",
+  "No": "No",
+  "North": "North",
+  "NotSelected": "Not selected",
+  "NumberBathrooms": "Number Bathrooms",
+  "NumberBeds": "Number Beds",
+  "NumberBedsFrom": "Number Beds From",
+  "NumberBedsTo": "Number Beds to",
+  "NumberKitchens": "Number Kitchens",
+  "NumberOfUnits": "Number Of Units",
+  "Off": "Off",
+  "On": "On",
+  "Optional": "Optional",
+  "OrLoginWith": "Or login with",
+  "OurClients": "Our Clients",
+  "OurClientsSYAJ": "Our Clients SYAJ",
+  "OurProjects": "Our Projects",
+  "OurServices": "Our Services",
+  "Pages": "Pages",
+  "PairsDoNotMatch": "Do not match",
+  "Parttime": "Part-time",
+  "Password": "Password",
+  "PasswordsDoNotMatch": "Passwords do not match",
+  "PasswordsMustBeAtLeast8CharactersContainLowercaseUppercaseNumber": "Passwords must be at least 8 characters, contain a lowercase, uppercase, and number",
+  "Permissions": "Permissions",
+  "phoneNumber": "Phone Number",
+  "phoneNumberWhatsapp": "Phone Number Whatsapp",
+  "PleaseEnterAtLeastNCharacter": "Please enter at least {0} characters",
+  "PleaseEnterLoginInformation": "Please enter login information",
+  "PleaseEnterNoMoreThanNCharacter": "Please enter no more than {0} characters",
+  "PleaseWait": "Please wait...",
+  "Price": "Price",
+  "PriceFrom": "Price From",
+  "PriceTo": "Price To",
+  "Professionalmarketingstrategiesdesignedtomaximize": "Professional marketing strategies designed to maximize property visibility and attract qualified buyers and tenants",
+  "Project": "Project",
+  "ProjectInformation": "Project Information",
+  "ProjectMap": "Project Map",
+  "Projects": "Projects",
+  "PropertyLeasing": "Property Leasing",
+  "PropertyManagement": "Property Management",
+  "PropertySales": "Property Sales",
+  "Providingleasingsolutionsforpropertyowners": "Providing leasing solutions for property owners and tenants, ensuring smooth and efficient transactions",
+  "ReadMore": "Read More",
+  "RealEstateAwareness": "Real Estate Awareness",
+  "RealEstateEvents": "Real Estate Events",
+  "RealEstateMarketing": "Real Estate Marketing",
+  "Refresh": "Refresh",
+  "Register": "Register",
+  "RegisterFormUserNameInvalidMessage": "Please don't enter an email address for username.",
+  "reliableservicesstrategicinsightandacommitmenttoexcellence": "reliable services, strategic insight, and a commitment to excellence",
+  "RememberMe": "Remember me",
+  "Reserved": "Reserved",
+  "ResetPassword": "Reset Password",
+  "ResetPasswordStepOneInfo": "1. Enter your administrator password",
+  "ResetPasswordStepTwoInfo": "2. Copy this random password so you can send it to the user",
+  "Responsibilities": "Responsibilities",
+  "ResponsibilitiesAr": "Responsibilities Ar",
+  "ResponsibilitiesEn": "Responsibilities En",
+  "RoleDeleteWarningMessage": "Role {0} will be deleted and unassigned from all assigned users.",
+  "RoleDescription": "Role description",
+  "RoleName": "Role Name",
+  "Roles": "Roles",
+  "Sales": "Sales",
+  "Save": "Save",
+  "SavedSuccessfully": "Saved successfully",
+  "Search": "Search",
+  "SearchWithThreeDot": "Search...",
+  "Select": "Select",
+  "Services": "Services",
+  "Settings": "Settings",
+  "Skins": "Skins",
+  "Sold": "Sold",
+  "South": "South",
+  "SpaceFrom": "Space From",
+  "SpaceTo": "Space To",
+  "SpaceUnit": "Space Unit",
+  "StartTyping": "Start Typing",
+  "StartYourRealEstateJourney": "Start Your Real Estate Journey",
+  "StatusUnit": "Status Unit",
+  "SubTitleAr": "Sub Title Ar",
+  "SubTitleEn": "Sub Title En",
+  "SuccessfullyDeleted": "Successfully deleted",
+  "SuccessfullyRegistered": "Successfully registered",
+  "Surname": "Surname",
+  "syaj": "Syaj",
+  "SYAJRealEstate": "SYAJ Real Estate",
+  "TenancyName": "Tenancy name",
+  "TenantDeleteWarningMessage": "Tenant {0} will be deleted.",
+  "TenantIdIsNotActive{0}": "TenantId {0} is not active",
+  "TenantIsNotActive": "Tenant {0} is not active.",
+  "TenantName_Regex_Description": "Tenant name must be at least 2 chars, starts with a letter and continue with letter, number, dash or underscore.",
+  "TenantNameCanNotBeEmpty": "Tenant name can not be empty",
+  "Tenants": "Tenants",
+  "TenantSelection": "Tenant Selection",
+  "TenantSelection_Detail": "Please select one of the following tenants.",
+  "ThereIsNoTenantDefinedWithName{0}": "There is no tenant defined with name {0}",
+  "ThisFieldIsRequired": "This field is required",
+  "TitleEvents": "Title Events",
+  "TitleEventsAr": "Title Events Ar",
+  "TotalRecordsCount": "Total: {0}",
+  "TransparencyTrusttempus": "Transparency & Trust tempus",
+  "TypeEvents": "Type Events",
+  "TypeProject": "Type Project",
+  "Unit": "Unit",
+  "Units": "Units",
+  "UnitType": "Unit Type",
+  "UnknownTenantId{0}": "Unknown tenantId {0}",
+  "Update": "Update",
+  "UpdatePassword": "Update Password",
+  "UserDeleteWarningMessage": "User {0} will be deleted.",
+  "UserDetails": "User details",
+  "UserEmailIsNotConfirmedAndCanNotLogin": "Your email address is not confirmed. You can not login.",
+  "UserIsNotActiveAndCanNotLogin": "User {0} is not active and can not log in.",
+  "UserLockedOutMessage": "The user account has been locked out. Please try again later.",
+  "UserName": "User name",
+  "UserNameOrEmail": "User name or email",
+  "UserRoles": "User roles",
+  "Users": "Users",
+  "UsersActivation": "Users activation",
+  "Version": "Version",
+  "ViewProject": "View Project",
+  "Villas": "Villas",
+  "WaitingForActivationMessage": "Your account is waiting to be activated by system admin.",
+  "WaitingForEmailActivation": "Your email address should be activated",
+  "Weconnectpeoplewithexceptionalrealestateopportunitiesthrough": "We connect people with exceptional real estate opportunities through",
+  "Welcome": "Welcome",
+  "WelcomeMessage": "Welcome to Hexa_Aqari!",
+  "West": "West",
+  "WhatsApp": "WhatsApp",
+  "WhoAreWe": "Who Are We",
+  "WorkType": "Work Type",
+  "Yes": "Yes"
+};
+
+
+})();
+
+(function() {
+
+    abp.features = abp.features || {};
+
+    abp.features.allFeatures = {
+    };
+
+})();
+
+(function(){
+
+    abp.auth = abp.auth || {};
+
+    abp.auth.allPermissions = {
+        'Pages.Users': true,
+        'Pages.Users.Activation': true,
+        'Pages.Roles': true,
+        'Pages.Projects': true,
+        'Pages.Units': true,
+        'Pages.EstateEvents': true,
+        'Pages.Clients': true,
+        'Pages.Jobs': true
+    };
+
+    abp.auth.grantedPermissions = {
+    };
+
+})();
+
+(function() {
+    abp.nav = {};
+    abp.nav.menus = {
+        'MainMenu': {
+            name: 'MainMenu',
+            displayName: 'Main menu',
+            items: [{
+                    name: 'About',
+                    order: 0,
+                    icon: 'fas fa-info-circle',
+                    url: 'About',
+                    displayName: 'About',
+                    isEnabled: true,
+                    isVisible: true,
+                    items: []
+                } , {
+                    name: 'MultiLevelMenu',
+                    order: 0,
+                    icon: 'fas fa-circle',
+                    displayName: 'Multi Level Menu',
+                    isEnabled: true,
+                    isVisible: true,
+                    items: [{
+                            name: 'AspNetBoilerplate',
+                            order: 0,
+                            icon: 'far fa-circle',
+                            displayName: 'ASP.NET Boilerplate',
+                            isEnabled: true,
+                            isVisible: true,
+                            items: [{
+                            name: 'AspNetBoilerplateHome',
+                            order: 0,
+                            icon: 'far fa-dot-circle',
+                            url: 'https://aspnetboilerplate.com?ref=abptmpl',
+                            displayName: 'Home',
+                            target: '_blank',
+                            isEnabled: true,
+                            isVisible: true,
+                            items: []
+                        } , {
+                            name: 'AspNetBoilerplateTemplates',
+                            order: 0,
+                            icon: 'far fa-dot-circle',
+                            url: 'https://aspnetboilerplate.com/Templates?ref=abptmpl',
+                            displayName: 'Templates',
+                            target: '_blank',
+                            isEnabled: true,
+                            isVisible: true,
+                            items: []
+                        } , {
+                            name: 'AspNetBoilerplateSamples',
+                            order: 0,
+                            icon: 'far fa-dot-circle',
+                            url: 'https://aspnetboilerplate.com/Samples?ref=abptmpl',
+                            displayName: 'Samples',
+                            target: '_blank',
+                            isEnabled: true,
+                            isVisible: true,
+                            items: []
+                        } , {
+                            name: 'AspNetBoilerplateDocuments',
+                            order: 0,
+                            icon: 'far fa-dot-circle',
+                            url: 'https://aspnetboilerplate.com/Pages/Documents?ref=abptmpl',
+                            displayName: 'Documents',
+                            target: '_blank',
+                            isEnabled: true,
+                            isVisible: true,
+                            items: []
+                        }]
+                        } , {
+                            name: 'AspNetZero',
+                            order: 0,
+                            icon: 'far fa-circle',
+                            displayName: 'ASP.NET Zero',
+                            isEnabled: true,
+                            isVisible: true,
+                            items: [{
+                            name: 'AspNetZeroHome',
+                            order: 0,
+                            icon: 'far fa-dot-circle',
+                            url: 'https://aspnetzero.com?ref=abptmpl',
+                            displayName: 'Home',
+                            target: '_blank',
+                            isEnabled: true,
+                            isVisible: true,
+                            items: []
+                        } , {
+                            name: 'AspNetZeroFeatures',
+                            order: 0,
+                            icon: 'far fa-dot-circle',
+                            url: 'https://aspnetzero.com/Features?ref=abptmpl',
+                            displayName: 'Features',
+                            target: '_blank',
+                            isEnabled: true,
+                            isVisible: true,
+                            items: []
+                        } , {
+                            name: 'AspNetZeroPricing',
+                            order: 0,
+                            icon: 'far fa-dot-circle',
+                            url: 'https://aspnetzero.com/Pricing?ref=abptmpl#pricing',
+                            displayName: 'Pricing',
+                            target: '_blank',
+                            isEnabled: true,
+                            isVisible: true,
+                            items: []
+                        } , {
+                            name: 'AspNetZeroFaq',
+                            order: 0,
+                            icon: 'far fa-dot-circle',
+                            url: 'https://aspnetzero.com/Faq?ref=abptmpl',
+                            displayName: 'Faq',
+                            target: '_blank',
+                            isEnabled: true,
+                            isVisible: true,
+                            items: []
+                        } , {
+                            name: 'AspNetZeroDocuments',
+                            order: 0,
+                            icon: 'far fa-dot-circle',
+                            url: 'https://aspnetzero.com/Documents?ref=abptmpl',
+                            displayName: 'Documents',
+                            target: '_blank',
+                            isEnabled: true,
+                            isVisible: true,
+                            items: []
+                        }]
+                        }]
+                }]
+            }
+    };
+})();
+
+
+(function(){
+    abp.setting = abp.setting || {};
+    abp.setting.values = {
+
+        'Abp.Localization.DefaultLanguageName': 'en',
+        'Abp.Notifications.ReceiveNotifications': 'true',
+        'Abp.Timing.TimeZone': 'UTC',
+        'Abp.Zero.UserManagement.IsEmailConfirmationRequiredForLogin': 'false',
+        'Abp.Zero.OrganizationUnits.MaxUserMembershipCount': '2147483647',
+        'Abp.Zero.UserManagement.TwoFactorLogin.IsEnabled': 'true',
+        'Abp.Zero.UserManagement.TwoFactorLogin.IsRememberBrowserEnabled': 'true',
+        'Abp.Zero.UserManagement.TwoFactorLogin.IsEmailProviderEnabled': 'true',
+        'Abp.Zero.UserManagement.TwoFactorLogin.IsSmsProviderEnabled': 'true',
+        'Abp.Zero.UserManagement.UserLockOut.IsEnabled': 'true',
+        'Abp.Zero.UserManagement.UserLockOut.MaxFailedAccessAttemptsBeforeLockout': '5',
+        'Abp.Zero.UserManagement.UserLockOut.DefaultAccountLockoutSeconds': '300',
+        'Abp.Zero.UserManagement.PasswordComplexity.RequireDigit': 'false',
+        'Abp.Zero.UserManagement.PasswordComplexity.RequireLowercase': 'false',
+        'Abp.Zero.UserManagement.PasswordComplexity.RequireNonAlphanumeric': 'false',
+        'Abp.Zero.UserManagement.PasswordComplexity.RequireUppercase': 'false',
+        'Abp.Zero.UserManagement.PasswordComplexity.RequiredLength': '6',
+        'App.UiTheme': 'red'
+    };
+
+})();
+
+(function(){
+    abp.clock.provider = abp.timing.unspecifiedClockProvider || abp.timing.localClockProvider;
+    abp.clock.provider.supportsMultipleTimezone = false;
+})();
+
+(function(abp){
+
+    abp.custom = {}
+
+})(abp);
+
+(function(){
+    abp.event.trigger('abp.dynamicScriptsInitialized');
+})();
